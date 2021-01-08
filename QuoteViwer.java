@@ -1,13 +1,24 @@
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class QuoteViewer {
+public class QuoteViewer extends JFrame implements ActionListener {
 	private final ArrayList<Quote> quotes;
+	private JPanel quote_container = new JPanel(), buttons = new JPanel();
+	private JLabel quote;
+	private JButton next = new JButton("Next Quote");
+	private JButton prev = new JButton("Previous Quote");
+
+	private int index = 0;
 
 	public QuoteViewer() {
+		super("Quote Viewer");	
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLayout(new FlowLayout());
+
 		quotes = new ArrayList<Quote>(Arrays.asList(
 			new Quote("Marilyn Monroe", "I'm selfish, impatient and a little insecure. I make mistakes, I am out of control and at times hard to handle. But if you can't handle me at my worst, then you sure as hell don't deserve me at my best."),
 			new Quote("Oscar Wilde", "Be yourself; everyone else is already taken."),
@@ -28,27 +39,47 @@ public class QuoteViewer {
 	public static void main(String[] args) {
 		QuoteViewer qv = new QuoteViewer();
 
-		JFrame frame = new JFrame("UI Test");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLayout(new FlowLayout());
-        Container cont = new Container();
-		cont.setLayout(new FlowLayout());
+		// quote
+		qv.quote_container.setLayout(new FlowLayout());
+		qv.quote = new JLabel(qv.quotes.get(qv.index).toString());
+		qv.quote.setForeground(Color.GREEN);
+		qv.quote.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 10));
+		qv.quote_container.add(qv.quote);
+		qv.add(qv.quote_container);
+		
+		// buttons
+		qv.buttons.setLayout(new FlowLayout());
+		qv.buttons.add(qv.next);
+		qv.buttons.add(qv.prev);
+		qv.add(qv.buttons);
 
-		for(Quote q: qv.quotes) {
-			JLabel lab = new JLabel(String.format("\"%s\" - %s", q.quote, q.author));
-			lab.setForeground(Color.GREEN);
-			lab.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 10));
-			cont.add(lab);
-		}
+		// listeners
+		qv.next.addActionListener(qv);
+		qv.prev.addActionListener(qv);
 
-		frame.add(cont);
-        
-        //
-
-        frame.setSize(300, 300);
-        frame.setVisible(true);
+        qv.setSize(1000, 300);
+		qv.setVisible(true);
 	}
 	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// if next pushed
+		if(e.getSource() == next) {
+			// incirment if feasible
+			if(index+1 != quotes.size()) {
+				quote.setText(quotes.get(++index).toString());
+				repaint();
+			}
+		}
+		// if prev pushed
+		else if(e.getSource() == prev) {
+			// incirment if feasible
+			if(index != 0) {
+				quote.setText(quotes.get(--index).toString());
+				repaint();
+			}
+		}
+	}
 
 
 	private class Quote {
@@ -57,6 +88,11 @@ public class QuoteViewer {
 		Quote(String a, String q) {
 			author = a;
 			quote = q;
+		}
+
+		@Override
+		public String toString() {
+			return String.format("\"%s\" - %s", quote, author);
 		}
 	}
 }
