@@ -20,8 +20,8 @@ public class QuoteViewer {
 			new Quote("Mae West", "You only live once, but if you do it right, once is enough."),
 			new Quote("Mahatma Gandhi", "Be the change that you wish to see in the world.")
 	));*/
-	
-	public QuoteViewer() {
+
+	public static void main(String[] args) {
 		final ArrayList<Quote> quotes = new ArrayList<Quote>(Arrays.asList(
 			new Quote("Marilyn Monroe", "I'm selfish, impatient and a little insecure. I make mistakes, I am out of control and at times hard to handle. But if you can't handle me at my worst, then you sure as hell don't deserve me at my best."),
 			new Quote("Oscar Wilde", "Be yourself; everyone else is already taken."),
@@ -37,26 +37,28 @@ public class QuoteViewer {
 			new Quote("Mae West", "You only live once, but if you do it right, once is enough."),
 			new Quote("Mahatma Gandhi", "Be the change that you wish to see in the world.")
 		));
+
+		QuoteViewer qv = new QuoteViewer();
 		JFrame frame = new JFrame("UI Test");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new FlowLayout());
         Container cont = new Container();
 		cont.setLayout(new FlowLayout());
-		JLabel lab = new JLabel(quotes.get(0).quote);
-		lab.setForeground(Color.GREEN);
-		lab.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
 
-		cont.add(lab);
+		for(Quote q: quotes) {
+			JLabel lab = new JLabel(String.format("\"%s\" - %s", q.quote, q.author));
+			lab.setForeground(Color.GREEN);
+			lab.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 10));
+			cont.add(lab);
+		}
+
+
 		frame.add(cont);
         
         //
 
         frame.setSize(300, 300);
         frame.setVisible(true);
-	}
-
-	public static void main(String[] args) {
-		QuoteViewer qv = new QuoteViewer();
 	}
 	
 
