@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class QuoteViewer extends JFrame implements ActionListener {
+	private final static int BASEWIDTH = 600, BASEHEIGHT = 600;
 	private final ArrayList<Quote> quotes;
 	private JPanel quote_container = new JPanel(), buttons = new JPanel();
 	private JLabel quote;
@@ -34,14 +35,15 @@ public class QuoteViewer extends JFrame implements ActionListener {
 			new Quote("Mahatma Gandhi", "Be the change that you wish to see in the world.")
 		));
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLayout(new FlowLayout());
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setLayout(new FlowLayout());
+		setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
 
 		// quote
 		quote_container.setLayout(new FlowLayout());
-		quote = new JLabel(quotes.get(index).toString());
-		quote.setForeground(Color.GREEN);
-		quote.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 10));
+		quote = new JLabel(quotes.get(index).toStringHtml(BASEWIDTH));
+		quote.setForeground(Color.DARK_GRAY);
+		quote.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 30));
 		quote_container.add(quote);
 		add(quote_container);
 		
@@ -60,7 +62,7 @@ public class QuoteViewer extends JFrame implements ActionListener {
 		next.addActionListener(this);
 		prev.addActionListener(this);
 
-        setSize(1000, 300);
+        setSize(BASEWIDTH, BASEHEIGHT);
 		setVisible(true);
 	}
 
@@ -74,7 +76,7 @@ public class QuoteViewer extends JFrame implements ActionListener {
 		if(e.getSource() == next) {
 			// incirment if feasible
 			if(index+1 != quotes.size()) {
-				quote.setText(quotes.get(++index).toString());
+				quote.setText(quotes.get(++index).toStringHtml(getWidth()));
 				bar.setValue(index);
 				repaint();
 				return;
@@ -84,7 +86,7 @@ public class QuoteViewer extends JFrame implements ActionListener {
 		else if(e.getSource() == prev) {
 			// incirment if feasible
 			if(index != 0) {
-				quote.setText(quotes.get(--index).toString());
+				quote.setText(quotes.get(--index).toStringHtml(getWidth()));
 				bar.setValue(index);
 				repaint();
 				return;
@@ -104,6 +106,10 @@ public class QuoteViewer extends JFrame implements ActionListener {
 		@Override
 		public String toString() {
 			return String.format("\"%s\" - %s", quote, author);
+		}
+
+		public String toStringHtml(int width) {
+			return String.format("<html><body style='width: %1spx'>\"%s\" - %s</body></html>", width*0.5, quote, author);
 		}
 	}
 }
