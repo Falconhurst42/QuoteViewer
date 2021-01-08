@@ -11,13 +11,12 @@ public class QuoteViewer extends JFrame implements ActionListener {
 	private JLabel quote;
 	private JButton next = new JButton("Next Quote");
 	private JButton prev = new JButton("Previous Quote");
+	private JProgressBar bar = new JProgressBar();
 
 	private int index = 0;
 
 	public QuoteViewer() {
-		super("Quote Viewer");	
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLayout(new FlowLayout());
+		super("Quote Viewer");
 
 		quotes = new ArrayList<Quote>(Arrays.asList(
 			new Quote("Marilyn Monroe", "I'm selfish, impatient and a little insecure. I make mistakes, I am out of control and at times hard to handle. But if you can't handle me at my worst, then you sure as hell don't deserve me at my best."),
@@ -34,31 +33,39 @@ public class QuoteViewer extends JFrame implements ActionListener {
 			new Quote("Mae West", "You only live once, but if you do it right, once is enough."),
 			new Quote("Mahatma Gandhi", "Be the change that you wish to see in the world.")
 		));
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLayout(new FlowLayout());
+
+		// quote
+		quote_container.setLayout(new FlowLayout());
+		quote = new JLabel(quotes.get(index).toString());
+		quote.setForeground(Color.GREEN);
+		quote.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 10));
+		quote_container.add(quote);
+		add(quote_container);
+		
+		// buttons
+		buttons.setLayout(new FlowLayout());
+		buttons.add(next);
+		buttons.add(prev);
+		add(buttons);
+
+		// bar
+		bar.setMaximum(quotes.size()-1);
+		bar.setValue(index);
+		add(bar);
+
+		// listeners
+		next.addActionListener(this);
+		prev.addActionListener(this);
+
+        setSize(1000, 300);
+		setVisible(true);
 	}
 
 	public static void main(String[] args) {
 		QuoteViewer qv = new QuoteViewer();
-
-		// quote
-		qv.quote_container.setLayout(new FlowLayout());
-		qv.quote = new JLabel(qv.quotes.get(qv.index).toString());
-		qv.quote.setForeground(Color.GREEN);
-		qv.quote.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 10));
-		qv.quote_container.add(qv.quote);
-		qv.add(qv.quote_container);
-		
-		// buttons
-		qv.buttons.setLayout(new FlowLayout());
-		qv.buttons.add(qv.next);
-		qv.buttons.add(qv.prev);
-		qv.add(qv.buttons);
-
-		// listeners
-		qv.next.addActionListener(qv);
-		qv.prev.addActionListener(qv);
-
-        qv.setSize(1000, 300);
-		qv.setVisible(true);
 	}
 	
 	@Override
@@ -68,7 +75,9 @@ public class QuoteViewer extends JFrame implements ActionListener {
 			// incirment if feasible
 			if(index+1 != quotes.size()) {
 				quote.setText(quotes.get(++index).toString());
+				bar.setValue(index);
 				repaint();
+				return;
 			}
 		}
 		// if prev pushed
@@ -76,7 +85,9 @@ public class QuoteViewer extends JFrame implements ActionListener {
 			// incirment if feasible
 			if(index != 0) {
 				quote.setText(quotes.get(--index).toString());
+				bar.setValue(index);
 				repaint();
+				return;
 			}
 		}
 	}
