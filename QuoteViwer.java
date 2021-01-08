@@ -1,8 +1,6 @@
 import java.awt.*;
 import javax.swing.*;
 
-import jdk.internal.platform.Container;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -41,9 +39,13 @@ public class QuoteViewer {
 		));
 		JFrame frame = new JFrame("UI Test");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLayout(new FlowLayout());
         Container cont = new Container();
+		cont.setLayout(new FlowLayout());
 		JLabel lab = new JLabel(quotes.get(0).quote);
-		
+		lab.setForeground(Color.GREEN);
+		lab.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 20));
+
 		cont.add(lab);
 		frame.add(cont);
         
@@ -51,6 +53,10 @@ public class QuoteViewer {
 
         frame.setSize(300, 300);
         frame.setVisible(true);
+	}
+
+	public static void main(String[] args) {
+		QuoteViewer qv = new QuoteViewer();
 	}
 	
 
